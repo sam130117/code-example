@@ -1,0 +1,68 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+// Variables
+@import 'variables';
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+.container {
+    max-width: 1440px!important;
+}
+
+.navbar-laravel {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.card-link {
+    text-decoration: none;
+    color: #0a0b0e !important;
+
+    &:hover {
+        color: #536467 !important;
+    }
+}
+
+.mode-area {
+    &:hover {
+        cursor: pointer;
+        background-color: #e4e4e4;
+    }
+}
+
+.cards-scroll-container {
+    height: 620px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 20px;
+}
+
+.invalid-feedback {
+    font-size: 100% !important;
+}
+
+.card-toggle-container {
+    padding-bottom: 10px;
+
+    &:hover {
+        cursor: pointer;
+    }
+    .card-toggle-header {
+        display: block;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        border: 1px solid lightgray;
+        padding: 10px;
+        font-size: 1.2em;
+
+        &:hover {
+            background-color: #f5f5f5;
+        }
+    }
+    .card-toggle-content {
+        padding: 10px;
+        border: 1px solid lightgray;
+        border-top: none;
+    }
+}
+
