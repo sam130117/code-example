@@ -1,40 +1,32 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: developer
+ * Date: 04.01.19
+ * Time: 10:34
+ */
 
 namespace App\Http\Services;
 
 
-use App\Models\Cases;
+use App\Http\Repositories\CasesRepository;
+use App\Http\Repositories\UsersRepository;
 
 class CasesService extends BaseService
 {
-    const MODEL_NAME = Cases::class;
+    protected $casesRepository;
+    protected $usersRepository;
 
-    public function getAll()
+    public function __construct(CasesRepository $casesRepository, UsersRepository $usersRepository)
     {
-        $search = request()->get('search', null);
-        $query = (self::MODEL_NAME)::select('id', 'title');
-        if ($search)
-            $query->where('title', 'LIKE', "%$search%");
-        return $query->paginate();
+        $this->casesRepository = $casesRepository;
+        $this->usersRepository = $usersRepository;
     }
 
-    public function getCaseWithCards($id)
+    public function getCaseWithUsers($id): array
     {
-        return (self::MODEL_NAME)::with(['cards', 'user'])
-            ->where('id', $id)
-            ->first();
-    }
-
-    public function updateByIdWithCards($id, array $caseData, ?array $cardsData)
-    {
-        $case = (self::MODEL_NAME)::with('cards')->find($id);
-        $case->fill($caseData);
-        $case->save();
-
-        if ($cardsData)
-            foreach ($case->cards as $index => $card)
-                $card->fill($cardsData[$index])->save($cardsData[$index]);
-
-        return $case;
+        $case = $this->casesRepository->getCaseWithCards($id);
+        $users = $this->usersRepository->getAll();
+        return ['case' => $case, 'users' => $users];
     }
 }

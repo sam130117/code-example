@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
 
 class HomeController extends Controller
 {
@@ -12,3 +13,4 @@ class HomeController extends Controller
         return view('index');
     }
 }
+

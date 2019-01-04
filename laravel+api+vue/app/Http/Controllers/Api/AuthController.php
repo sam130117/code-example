@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\UsersApiRequest;
-use App\Http\Services\UsersService;
+use App\Http\Repositories\UsersRepository;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -14,11 +14,11 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    protected $usersService;
+    protected $usersRepository;
 
-    public function __construct(UsersService $usersService)
+    public function __construct(UsersRepository $usersRepository)
     {
-        $this->usersService = $usersService;
+        $this->usersRepository = $usersRepository;
     }
 
     public function login(Request $request): JsonResponse
@@ -26,7 +26,7 @@ class AuthController extends Controller
         if (Auth::attempt(['email' => $request->get('email'), 'password' => $request->get('password')])) {
             $user = Auth::user();
             dd($user->token(), $user->tokens()->get()->toArray());
-            $tokenResult = $this->usersService->saveUserToken($user);
+            $tokenResult = $this->usersRepository->saveUserToken($user);
 
             return response()->json([
                 'code'         => Response::HTTP_OK,
@@ -52,9 +52,9 @@ class AuthController extends Controller
 
     public function signUp(UsersApiRequest $request): JsonResponse
     {
-        $data = request()->only(['name', 'email', 'password', 'password_confirm']);
-        $user = User::create($data);
-        $tokenResult = $this->usersService->saveUserToken($user);
+        $data = $request->only(['name', 'email', 'password', 'password_confirm']);
+        $user = $this->usersRepository->create($data);
+        $tokenResult = $this->usersRepository->saveUserToken($user);
 
         return response()->json([
             'code'         => Response::HTTP_OK,
